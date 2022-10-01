@@ -5,9 +5,12 @@ from pathlib import Path
 import pandas as pd
 from datetime import datetime
 from dotenv import load_dotenv
+import os.path
 
-load_dotenv()
-API_KEY = os.getenv('API_KEY')
+API_KEY = None
+if os.path.isfile('.env'):
+    load_dotenv()
+    API_KEY = os.getenv('API_KEY')
 
 now = datetime.now()  # current date and time
 date_time = now.strftime("%Y-%m-%d")
@@ -39,8 +42,10 @@ class Write:
         df.to_csv(name, encoding="utf-8", index=False)
 
 
-def bitqueryAPICall(query: str, variables: dict = {}):
-    headers = {"X-API-KEY": API_KEY}
+def bitqueryAPICall(query: str, variables: dict = {}, api_key: str = None):
+    if not api_key:
+        api_key = API_KEY
+    headers = {"X-API-KEY": api_key}
     request = requests.post("https://graphql.bitquery.io/",
                             json={
                                 "query": query,

@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-import scripts.utils as utils
+import utils as utils
 
 w = utils.Write(Path(os.path.basename(__file__)).stem)
 
